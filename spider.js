@@ -75,8 +75,7 @@ Spider.prototype = {
 			this.childrens[name] = new Insect(_class ,name);
 		}else if( !!name && this.isType(name ,'string') ){
 			_class = this.isInsect(_class) ? _class.gInsect() : _class;
-			this.childrens[name] = new Insect(typeof _class === 'object' ? 
-												_class : this.cElement(_class) ,name);
+			this.childrens[name] = new Insect(typeof _class === 'object' ? _class : this.cElement(_class) ,name);
 		}else{
 			throw new Error('Spider init error');
 		}
@@ -206,8 +205,7 @@ Insect.prototype = {
 					this.gInsect().setAttribute(attr,attrs[attr]);
 				}
 			}
-		}else if ( arguments.length === 2 && this.isType(attrs , 'string') 
-										&& this.isType(val , 'string') ) {
+		}else if ( arguments.length === 2 && this.isType(attrs , 'string') && this.isType(val , 'string') ) {
 			this.gInsect().setAttribute(attrs, val);
 		}
 		return this;
