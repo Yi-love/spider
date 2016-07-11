@@ -1,0 +1,2 @@
+# spider
+svg elements manage
