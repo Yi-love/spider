@@ -11,7 +11,7 @@ html:
 	     id="timeline" 
 	     xmlns="http://www.w3.org/2000/svg">
 	</svg>
-	<script src="../spider.js"></script>
+	<script src="spider.js"></script>
 ```
 js:
 ```js
