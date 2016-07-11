@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>line3  Spider use</title>
+</head>
+<style>
+	html,body{
+		height: 100%;
+		margin: 0;
+		padding: 0;
+	}
+	path,text , g,circle{
+		-webkit-transition: all 3s;
+		-moz-transition: all 3s;
+		-ms-transition: all 3s;
+		-o-transition: all 3s;
+		transition: all 3s;
+		cursor: pointer;
+	}
+	text:hover{
+		color: #333;
+	}
+	.runBT{
+		width: 160px;
+		height: 32px;
+	}
+</style>
+<body>
+	<svg version="1.1"
+	     baseProfile="full"
+	     width="100%" height="600" 
+	     id="timeline" 
+	     xmlns="http://www.w3.org/2000/svg">
+		
+		<defs>
+			<linearGradient id="two_hues">
+				<stop offset="0%" style="stop-color:#6effa2;" />
+				<stop offset="100%" style="stop-color:#0091fe;" />
+			</linearGradient>
+
+			<filter id="drop-shadow" height="24">
+				<feColorMatrix type="matrix"
+					values="0 0 0 0.46 0
+							0 0 0 0.38 0
+							0 0 0 0.35 0
+							0 0 0 0.2 0"/>
+				<feGaussianBlur stdDeviation="2.5" result="coloredBlur"/>
+				<feOffset in='coloredBlur' dx="0" dy="24" result="offsetBlur"/>
+				<feMerge>
+					<feMergeNode in="offsetBlur"/>
+					<feMergeNode in="SourceGraphic"/>	
+				</feMerge>
+			</filter>
+	    	<linearGradient id="mycolor">
+	    		<stop offset="0%" style="stop-color:#999;" />
+	    		<stop offset="100%" style="stop-color:#efefef; stop-opacity:0" />
+	    	</linearGradient>
+	    	<linearGradient id="myline" xlink:href="#mycolor" x1="0%" y1="0%" x2="0%" y2="100%" ></linearGradient>
+		</defs>
+	</svg>
+	<button class="runBT">Run</button>
+	<script src="../spider.js"></script>
+	<script>
+		/**
+		 * [createBezier 创建贝塞尔曲线]
+		 * @param  {[type]} darr   [description]
+		 * @return {[type]}        [description]
+		 */
+		function createBezier(darr){
+			
+			var startx = darr[0][0],
+				starty = darr[0][1];
+
+			var d = 'M '+startx+' '+starty+' ',
+				i = 1 , 
+				j , 
+				tarr = null , 
+				len = darr.length;
+			for (; i < len ; i++) {
+				tarr = darr[i];
+				d += tarr[0]+' ';
+				for (j = 1 ; j < tarr.length ; j++ ){
+					d += (startx+tarr[j][0])+' '+(starty+tarr[j][1])+',';
+				}
+				d = d.replace(/,$/ , ' ');
+			};
+			return d;
+		};
+		/**
+		 * [createTxtTipsPath 创建提示框]
+		 * @param  {[type]} arr  [description]
+		 * @return {[type]}      [description]
+		 */
+		function createTxtTipsPath(arr){
+			var x = arr[0], 
+				y = arr[1], 
+				w = arr[2],
+				h = arr[3], 
+				r = arr[4], 
+				t = arr[5];
+
+			var halfW = w/2 , halfH = h/2;
+
+			var x1 = x-halfW+r , y1 = y-halfH ,
+				x2 = x+halfW-r , y2 = y-halfH ,
+				x3 = x+halfW   , y3 = y-halfH+r ,
+				x4 = x+halfW   , y4 = y+halfH-r ,
+				x5 = x+halfW-r , y5 = y+halfH ,
+				x6 = x+t       , y6 = y+halfH ,
+				x7 = x         , y7 = y+halfH+t ,
+				x8 = x-t       , y8 = y+halfH ,
+				x9 = x-halfW+r , y9 = y+halfH ,
+				x10 = x-halfW  , y10 = y+halfH-r ,
+				x11 = x-halfW  , y11 = y-halfH+r ,
+				area = ' A '+r+' '+r+' , 0, 0 ,1 ,' ;
+
+			var d = 'M '+x1+' '+y1+' , '+x2+' '+y2+area+x3+' '+y3+' L '+x4+' '+y4+area+x5+' '+y5+' L '+x6+' '+y6+
+					' , '+x7+' '+y7+' , '+x8+' '+y8+' , '+x9+' '+y9+area+x10+' '+y10+' L '+x11+' '+y11+area+x1+' '+y1;
+			return d;
+		};
+		/**
+		 * [craeteTips 创建提示]
+		 * @param  {[type]} dom [description]
+		 * @param  {[type]} arr [description]
+		 * @return {[type]}     [description]
+		 */
+		function craeteTips(spider , sarr , arr){
+			var startx = sarr[0],
+				starty = sarr[1];
+
+			var	x = startx+arr[0],
+				y = starty+arr[1],
+				w = arr[2],
+				h = arr[3];
+
+			var path  = spider.def('path').attr({d:createTxtTipsPath([x , y-80 ,w*.6 , 50 , 4 , 12]) , fill:'#eee'});
+			var txt = spider.def('text').attr({x:x ,y:y-80+20/3 , 'font-size':20 , 'fill':'#999' , 'text-anchor':'middle'});
+				txt.text('Hello I’m here!');
+			var cirOne = spider.def('circle').attr({cx:x, cy:y, r:11, 'stroke-width':10, stroke:'#fff' , fill:'#fff'});
+			var cirTwo = spider.def('circle').attr({cx:x, cy:y, r:15, 'stroke-width':3, stroke:'#999' , fill:'none'});
+			var rect = spider.def('rect').attr({x:x-1, y:y+15, width:2, height:h-y+15, fill:'url(#myline)'});
+ 
+			return spider.def('g',true).attr({style:'opacity: 0;',fill:'none'}).add([path,txt,cirOne,cirTwo,rect]);;
+		};
+		//svg
+		var timeline = document.getElementById('timeline');
+		//svg起点
+		var startarr = [-10,300] , arr = [];
+		var darr = [ 
+					startarr,
+					['C',[215,-10],[444,123] ,[641,88]],
+					['S',[909,-27],[1005,-25],[1170,0],[1252,-11],[1440,-87],[1534,-87],[1737,-54],[1794,-65]],
+					['C',[1794,-65],[1866,-75],[1904,-104]],
+					['T',[1904,-104]]
+				];
+		//波浪线
+		var baselineattr = {
+					d:createBezier(darr),//波浪线路径 
+					'id':'baseline',
+					stroke:'url(#two_hues)',
+					'stroke-linecap':'round',
+					fill:'none',
+					'stroke-dasharray':'6 2400',
+					'stroke-width':12
+				};
+
+		//假如把 Spider比喻为一张蜘蛛网 ， 那么 Insect 就是粘在网上的害虫
+		var spider = new Spider(timeline);
+
+		//定义害虫,并添加到dom
+		var baseline = spider.def('baseline','path').attr(baselineattr);
+		spider.def('g',true).attr({filter:'url(#drop-shadow)',height:300}).add(baseline);
+
+		arr.push(craeteTips(spider ,startarr, [300 ,47 , 300 , 500]));
+		arr.push(craeteTips(spider ,startarr, [550 ,93 , 300 , 500]));
+		arr.push(craeteTips(spider ,startarr, [800 ,43 , 300 , 500]));
+		arr.push(craeteTips(spider ,startarr, [1100 ,-17 , 300 , 500]));
+		arr.push(craeteTips(spider ,startarr, [1350 ,-39 , 300 , 500]));
+		arr.push(craeteTips(spider ,startarr, [1650 , -76 , 300 , 500]));
+
+
+		var runBT = document.querySelector('.runBT');
+		runBT.addEventListener('click' , function(){
+			baseline.attr('stroke-dasharray','2400 2400');
+			var clear = null , len = arr.length-1;
+			function addTipsClock(step){
+				clearTimeout(clear);
+				if ( step >= 0 && step <= len )
+					arr[step].gInsect().style.opacity=1;
+				
+				clear = setTimeout(function(){
+					if ( len <= step ){
+						return clearTimeout(clear);
+					}else{
+						addTipsClock(step+1);
+					}
+				} , 200);
+			};
+			addTipsClock(-1);
+		});
+	</script>
+</body>
+</html>
