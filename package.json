@@ -1,0 +1,33 @@
+{
+  "name": "spider",
+  "version": "1.0.0",
+  "description": "'svg element manage'",
+  "main": "spider.js",
+  "directories": {
+    "example": "example",
+    "test": "mocha test"
+  },
+  "scripts": {
+    "test": "mocha test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Yi-love/spider.git"
+  },
+  "keywords": [
+    "svg"
+  ],
+  "author": "jin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Yi-love/spider/issues"
+  },
+  "homepage": "https://github.com/Yi-love/spider#readme",
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "gulp": "^3.9.1",
+    "gulp-rename": "^1.2.2",
+    "gulp-uglify": "^1.5.4",
+    "mocha": "^2.5.3"
+  }
+}
